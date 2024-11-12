@@ -1,0 +1,40 @@
+function calcola() {
+    // Recupero i valori dagli input
+    const num1 = parseFloat(document.getElementById('num1').value);
+    const num2 = parseFloat(document.getElementById('num2').value);
+    
+    // Verifica se i numeri sono validi
+    if (isNaN(num1) || isNaN(num2)) {
+        document.getElementById('risultato').innerText = "Inserisci numeri validi!";
+        return;
+    }
+
+    // Recupero l'operazione selezionata
+    const operazione = document.querySelector('input[name="operazione"]:checked');
+    
+    if (!operazione) {
+        document.getElementById('risultato').innerText = "Seleziona un'operazione!";
+        return;
+    }
+
+    // Prepara la query string
+    const operazioneSelezionata = operazione.value;
+    const url = new URL('https://3245-rutysenior-spaoperazion-genbujnjgfm.ws-eu116.gitpod.io/calcola');
+    url.searchParams.append('num1', num1);
+    url.searchParams.append('num2', num2);
+    url.searchParams.append('operazione', operazioneSelezionata);
+
+    // Invia la richiesta GET
+    fetch(url, {
+        method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Mostra il risultato nella pagina
+        document.getElementById('risultato').innerText = "Risultato: " + data.risultato;
+    })
+    .catch(error => {
+        document.getElementById('risultato').innerText = "Errore nella richiesta!";
+        console.error('Errore:', error);
+    });
+}
